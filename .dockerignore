@@ -1,0 +1,12 @@
+node_modules
+.next
+.git
+.source
+coverage
+playwright-report
+test-results
+**/.env
+**/.env.*
+secrets/db_password.txt
+nginx/certs/
+docs/
