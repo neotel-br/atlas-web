@@ -14,7 +14,12 @@ export default async function Layout({
   return (
     <DocsLayout
       tree={source.pageTree[lang]}
-      nav={{ title: "NeoDocs", children: <LocaleSwitch current={lang} /> }}
+      nav={{ title: "NeoDocs" }}
+      sidebar={{
+        // order-first lifts the locale switch above the theme-toggle row in the
+        // sidebar footer (a flex-col), so pt|en sits on top of the dark/light button.
+        footer: <LocaleSwitch current={lang} className="order-first justify-center pb-1" />,
+      }}
     >
       {children}
     </DocsLayout>

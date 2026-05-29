@@ -2,7 +2,13 @@
 import { usePathname, useRouter } from "next/navigation";
 import { locales } from "@/lib/i18n";
 
-export function LocaleSwitch({ current }: { current: string }) {
+export function LocaleSwitch({
+  current,
+  className,
+}: {
+  current: string;
+  className?: string;
+}) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -14,7 +20,7 @@ export function LocaleSwitch({ current }: { current: string }) {
   }
 
   return (
-    <div className="flex gap-2">
+    <div className={`flex gap-2 ${className ?? ""}`}>
       {locales.map((l) => (
         <button
           key={l}
