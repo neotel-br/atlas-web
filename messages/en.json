@@ -1,0 +1,23 @@
+{
+  "common": {
+    "appName": "NeoDocs",
+    "tagline": "Neotel internal documentation"
+  },
+  "nav": {
+    "documentation": "Documentation",
+    "processes": "Processes",
+    "reports": "Reports",
+    "signOut": "Sign out"
+  },
+  "login": {
+    "title": "Sign in",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "error": "Invalid credentials"
+  },
+  "landing": {
+    "welcome": "Welcome to NeoDocs",
+    "openDocs": "Open documentation"
+  }
+}
