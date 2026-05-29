@@ -1,0 +1,115 @@
+---
+title: Relatório de Incidente
+description: Modelo de post-mortem e relatório de incidente de segurança
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { Steps, Step } from 'fumadocs-ui/components/steps';
+
+## Relatório de Incidente de Segurança
+
+<Callout type="error">
+  Este modelo é para **incidentes P1 e P2** apenas. Incidentes P3+ usam o formulário simplificado no helpdesk.
+</Callout>
+
+---
+
+## Informações Gerais
+
+| Campo | Valor |
+|-------|-------|
+| ID do Incidente | INC-2026-047 |
+| Severidade | P1 — Crítico |
+| Data de Abertura | 2026-05-22 16:45 |
+| Data de Fechamento | 2026-05-22 19:12 |
+| Duração Total | 2h27min |
+| Sistemas Afetados | Portal de clientes, API de autenticação |
+| Usuários Impactados | ~150 clientes externos |
+
+---
+
+## Linha do Tempo
+
+| Horário | Evento |
+|---------|--------|
+| 16:45 | Alerta automático: taxa de erros 500 acima de 5% |
+| 16:47 | On-call notificado via PagerDuty |
+| 16:52 | Triagem iniciada — suspeita de falha no serviço de auth |
+| 17:10 | Causa raiz identificada: deploy com variável de ambiente ausente |
+| 17:15 | Rollback iniciado |
+| 17:22 | Serviço restaurado parcialmente |
+| 18:30 | Estabilização completa confirmada |
+| 19:12 | Incidente fechado após 30min de monitoramento |
+
+---
+
+## Análise de Causa Raiz (RCA)
+
+### O que aconteceu
+
+O deploy da versão `v2.4.1` foi realizado sem a variável `OAUTH_CLIENT_SECRET` no ambiente de produção. O processo de CI/CD não possui validação de variáveis obrigatórias pré-deploy.
+
+### Por que aconteceu
+
+<Steps>
+  <Step>
+    A variável foi adicionada ao `.env.example` mas não ao Vault de secrets de produção.
+  </Step>
+  <Step>
+    O pipeline de CD não executa healthcheck antes de remover o container anterior.
+  </Step>
+  <Step>
+    O on-call primário estava em reunião — delay de 7 minutos no primeiro response.
+  </Step>
+</Steps>
+
+### Por que não foi detectado antes
+
+```
+Deploy pipeline:
+  ✅ Lint
+  ✅ Unit tests
+  ✅ Build
+  ❌ Env vars validation  ← ausente
+  ✅ Push imagem
+  ✅ Deploy (sem rollback automático)
+```
+
+---
+
+## Impacto
+
+<Tabs items={['Técnico', 'Negócio', 'Reputação']}>
+  <Tab value="Técnico">
+    - 100% das requisições `/api/auth/*` retornando 500
+    - 0 dados corrompidos ou vazados
+    - Logs completos preservados para análise
+  </Tab>
+  <Tab value="Negócio">
+    - ~150 clientes externos sem acesso por 2h27min
+    - 3 contratos Enterprise com SLA de 99,9% — créditos a aplicar
+    - Estimativa de impacto: R$ 8.400 em créditos SLA
+  </Tab>
+  <Tab value="Reputação">
+    - 12 tickets abertos por clientes no período
+    - 2 clientes contataram o comercial questionando confiabilidade
+    - Comunicado enviado às 18:00 para todos os afetados
+  </Tab>
+</Tabs>
+
+---
+
+## Ações Corretivas
+
+| Ação | Responsável | Prazo | Status |
+|------|------------|-------|--------|
+| Adicionar validação de env vars no pipeline CD | DevOps | 2026-06-05 | 🔄 Em andamento |
+| Implementar healthcheck pré-substituição de container | DevOps | 2026-06-05 | 🔄 Em andamento |
+| Criar runbook de resposta para falhas de auth | Ops | 2026-06-12 | ⏳ Pendente |
+| Revisar todas as secrets em produção vs `.env.example` | Segurança | 2026-06-01 | ✅ Concluído |
+| Atualizar rotação de on-call para cobertura de horário | RH / Ops | 2026-06-15 | ⏳ Pendente |
+
+<Callout type="info">
+  Revisão de progresso agendada para **2026-06-20** na reunião de ops.
+</Callout>

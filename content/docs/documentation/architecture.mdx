@@ -1,0 +1,105 @@
+---
+title: Arquitetura
+description: Arquitetura técnica do NeoDocs
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
+import { File, Folder, Files } from 'fumadocs-ui/components/files';
+
+## Stack Tecnológico
+
+O NeoDocs é construído com tecnologias modernas focadas em performance e DX.
+
+| Camada | Tecnologia | Versão |
+|--------|-----------|--------|
+| Framework | Next.js | 15.x |
+| Docs Engine | Fumadocs | 14.x |
+| Banco de Dados | PostgreSQL + Drizzle ORM | 16.x |
+| Autenticação | NextAuth.js | 5.x |
+| Estilização | Tailwind CSS | 4.x |
+| Testes E2E | Playwright | latest |
+
+## Estrutura de Diretórios
+
+<Files>
+  <Folder name="app" defaultOpen>
+    <Folder name="[lang]">
+      <Folder name="docs">
+        <File name="[[...slug]]/page.tsx" />
+        <File name="layout.tsx" />
+      </Folder>
+      <Folder name="(auth)">
+        <File name="login/page.tsx" />
+      </Folder>
+      <File name="page.tsx" />
+      <File name="layout.tsx" />
+    </Folder>
+  </Folder>
+  <Folder name="content">
+    <Folder name="docs" defaultOpen>
+      <File name="index.mdx" />
+      <Folder name="documentation">
+        <File name="meta.json" />
+        <File name="index.mdx" />
+        <File name="overview.mdx" />
+      </Folder>
+    </Folder>
+  </Folder>
+  <Folder name="lib">
+    <File name="source.ts" />
+    <File name="i18n.ts" />
+  </Folder>
+  <File name="source.config.ts" />
+  <File name="next.config.ts" />
+</Files>
+
+## Fluxo de Autenticação
+
+```
+Usuário → Login Form → NextAuth → JWT → Middleware → Rota Protegida
+                                    ↓
+                              Banco de Dados (sessão)
+```
+
+<Callout type="info">
+  O middleware verifica o JWT em todas as rotas `/[lang]/docs/**` automaticamente.
+</Callout>
+
+## Internacionalização
+
+O sistema suporta dois idiomas configurados em `lib/i18n.ts`:
+
+```typescript
+export const i18n = {
+  defaultLocale: 'pt',
+  locales: ['pt', 'en'],
+} as const;
+```
+
+Arquivos de conteúdo seguem o padrão `nome.mdx` (PT) e `nome.en.mdx` (EN).
+
+## FAQ Técnico
+
+<Accordions>
+  <Accordion title="Como adicionar um novo idioma?">
+    1. Adicione o locale em `lib/i18n.ts`
+    2. Crie mensagens em `messages/[locale].json`
+    3. Crie arquivos `.mdx` com sufixo `.[locale].mdx`
+    4. Atualize o `middleware.ts` para incluir o novo locale
+  </Accordion>
+  <Accordion title="Como criar uma nova seção de docs?">
+    1. Crie pasta em `content/docs/[nome-secao]/`
+    2. Adicione `meta.json` com `title` e `pages`
+    3. Crie `index.mdx` e demais páginas
+    4. A seção aparece automaticamente na sidebar
+  </Accordion>
+  <Accordion title="Como fazer deploy em produção?">
+    Use `make prod-up` para subir com Docker Compose. O build é feito automaticamente.
+    Certifique-se de configurar todas as variáveis em `.env.prod`.
+  </Accordion>
+  <Accordion title="O que é o arquivo source.config.ts?">
+    Configura o Fumadocs MDX para processar os arquivos de conteúdo. Define diretórios,
+    plugins remark/rehype e opções de build. Modificar com cuidado.
+  </Accordion>
+</Accordions>

@@ -1,0 +1,101 @@
+---
+title: Políticas de Segurança
+description: Políticas de segurança da informação da Neotel
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
+
+## Políticas de Segurança da Informação
+
+Versão: **3.2** | Aprovação: Diretoria | Vigência: Janeiro 2026 – Dezembro 2026
+
+---
+
+## Classificação de Dados
+
+| Nível | Descrição | Exemplos |
+|-------|-----------|---------|
+| 🔴 **Confidencial** | Acesso restrito a papéis específicos | Dados de clientes, contratos, senhas |
+| 🟠 **Interno** | Acesso a todos os colaboradores | Procedimentos internos, estrutura org |
+| 🟡 **Restrito** | Acesso a equipes específicas | Código-fonte, arquiteturas técnicas |
+| 🟢 **Público** | Sem restrição de divulgação | Site corporativo, comunicados públicos |
+
+<Callout type="error">
+  Dados **Confidenciais** nunca devem ser armazenados em dispositivos pessoais, e-mails externos, ou serviços de nuvem não aprovados (Google Drive pessoal, Dropbox, etc.).
+</Callout>
+
+---
+
+## Política de Senhas
+
+<Accordions>
+  <Accordion title="Requisitos mínimos de senha">
+    - Mínimo de **16 caracteres**
+    - Ao menos 1 letra maiúscula, 1 minúscula, 1 número e 1 símbolo
+    - Não reutilizar as últimas **12 senhas**
+    - Validade máxima: **180 dias**
+
+    **Recomendação:** Use um gerenciador de senhas corporativo (Bitwarden Enterprise).
+  </Accordion>
+  <Accordion title="Autenticação de dois fatores (2FA)">
+    2FA é **obrigatório** para:
+    - Todos os sistemas de produção
+    - VPN corporativa
+    - GitHub, Jira, Confluence
+    - E-mail corporativo
+
+    Métodos aceitos (em ordem de preferência):
+    1. Hardware token (YubiKey) — recomendado para acessos privilegiados
+    2. TOTP via app (Microsoft Authenticator, Google Authenticator)
+    3. SMS — **não recomendado**, aceito apenas em casos excepcionais
+  </Accordion>
+  <Accordion title="Senhas de serviço e credenciais de sistema">
+    - Toda credencial de serviço deve estar no **Vault** (HashiCorp Vault)
+    - Rotação obrigatória a cada **90 dias** para credenciais de produção
+    - Nunca commitar secrets em repositórios Git (use `.gitignore` + hooks de pre-commit)
+    - Credenciais comprometidas: revogar imediatamente e abrir incidente P1
+  </Accordion>
+</Accordions>
+
+---
+
+## Controle de Acesso
+
+### Princípio do Menor Privilégio
+
+Todo acesso deve ser concedido com o **mínimo de privilégios** necessários para a função.
+
+```
+Solicitação de acesso → Aprovação do gestor → Implementação pelo time de TI → Revisão trimestral
+```
+
+### Revisão de Acessos
+
+- Trimestral: todos os acessos a sistemas críticos
+- Imediata: colaboradores em processo de desligamento
+- Semestral: acessos administrativos e privilegiados
+
+<Callout type="info">
+  Próxima revisão trimestral: **julho 2026**. O gestor de cada área receberá planilha para validação.
+</Callout>
+
+---
+
+## Uso Aceitável de Recursos de TI
+
+**Permitido:**
+- Uso dos equipamentos para atividades profissionais
+- Uso pessoal moderado e ocasional (e-mail pessoal, notícias)
+- Instalação de ferramentas de desenvolvimento aprovadas pela TI
+
+**Proibido:**
+- Download de software pirata ou de origem desconhecida
+- Uso de VPN pessoal nos dispositivos corporativos
+- Mineração de criptomoedas
+- Acesso a conteúdo ilegal ou impróprio
+- Compartilhamento de credenciais corporativas
+
+<Callout type="error">
+  Violações desta política podem resultar em **medidas disciplinares**, incluindo demissão por justa causa, e responsabilização civil e criminal.
+</Callout>

@@ -1,6 +1,141 @@
 ---
 title: Onboarding
-description: Processo de integração de novos colaboradores
+description: Processo de integração para novos colaboradores da Neotel
 ---
 
-Passos para integrar novos colaboradores na Neotel.
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Steps, Step } from 'fumadocs-ui/components/steps';
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { Card, Cards } from 'fumadocs-ui/components/card';
+
+## Onboarding — Neotel
+
+Bem-vindo à Neotel! Este guia descreve o processo de integração para os primeiros **30 dias**.
+
+<Callout type="info">
+  Seu gestor direto é responsável por acompanhar cada etapa deste checklist.
+</Callout>
+
+---
+
+## Semana 1 — Infraestrutura e Acesso
+
+<Steps>
+  <Step>
+    **Configurar estação de trabalho**
+
+    Acesse o portal de TI em `ti.neotel.internal` para solicitar:
+    - Notebook corporativo (Windows 11 ou macOS)
+    - Licença Microsoft 365
+    - VPN corporativa (Cisco AnyConnect)
+    - Crachá de acesso físico
+  </Step>
+  <Step>
+    **Criar contas corporativas**
+
+    O RH abrirá automaticamente os tickets para:
+    - E-mail `@neotel.com.br`
+    - Slack workspace `neotel.slack.com`
+    - GitHub org `github.com/neotel` (informe seu usuário ao gestor)
+    - Jira / Confluence
+  </Step>
+  <Step>
+    **Configurar autenticação de dois fatores (2FA)**
+
+    Obrigatório para todos os sistemas. Use **Microsoft Authenticator** (recomendado) ou Google Authenticator.
+
+    <Callout type="warn">
+      Contas sem 2FA são bloqueadas automaticamente após 7 dias.
+    </Callout>
+  </Step>
+  <Step>
+    **Ler políticas internas**
+
+    Documentos obrigatórios no SharePoint:
+    - Política de Segurança da Informação (PSI)
+    - Código de Conduta
+    - Política de Uso Aceitável de Recursos de TI
+  </Step>
+</Steps>
+
+---
+
+## Semana 2 — Imersão Técnica
+
+<Tabs items={['Desenvolvedor', 'Analista de Segurança', 'Suporte']}>
+  <Tab value="Desenvolvedor">
+    ### Setup de Desenvolvimento
+
+    ```bash
+    # Clone os repositórios principais
+    git clone https://github.com/neotel/neodocs-web
+    git clone https://github.com/neotel/api-core
+
+    # Configure o ambiente local
+    cp .env.example .env
+    npm install
+    npm run dev
+    ```
+
+    Leitura obrigatória:
+    - Guia de contribuição no README do repositório
+    - ADR (Architecture Decision Records) no Confluence
+    - Runbook de deploy
+  </Tab>
+  <Tab value="Analista de Segurança">
+    ### Ferramentas e Acesso
+
+    Solicite ao gestor acesso a:
+    - SIEM (Splunk)
+    - Plataforma de Threat Intelligence
+    - Vault de credenciais (HashiCorp Vault)
+    - Dashboard de vulnerabilidades (Tenable.io)
+
+    Leitura obrigatória:
+    - Playbooks de resposta a incidentes
+    - Mapa de ativos críticos
+    - Política de divulgação responsável
+  </Tab>
+  <Tab value="Suporte">
+    ### Sistema de Chamados
+
+    Acesse `helpdesk.neotel.internal` e:
+    - Complete o treinamento de L1/L2 (4h, assíncrono)
+    - Leia a base de conhecimento de soluções frequentes
+    - Acompanhe um analista sênior por 3 dias (shadowing)
+
+    SLAs que você precisará conhecer:
+    - P1: 30min primeira resposta, 4h resolução
+    - P2: 2h primeira resposta, 8h resolução
+    - P3: 8h primeira resposta, 3 dias resolução
+  </Tab>
+</Tabs>
+
+---
+
+## Semana 3–4 — Integração com o Time
+
+<Cards>
+  <Card title="1:1 com o Gestor" description="Reunião semanal de alinhamento. Calendário enviado no primeiro dia." />
+  <Card title="Apresentação ao Time" description="5 minutos no standup da semana 2 para se apresentar." />
+  <Card title="Buddy Program" description="Um colega sênior designado para dúvidas informais nos primeiros 30 dias." />
+  <Card title="Avaliação de 30 Dias" description="Feedback estruturado com o gestor ao final do primeiro mês." />
+</Cards>
+
+---
+
+## Checklist Final
+
+Use este checklist para confirmar que tudo está em ordem ao final da semana 4:
+
+- [ ] Todas as contas criadas e 2FA ativo
+- [ ] VPN configurada e funcionando
+- [ ] Repositórios clonados e ambiente local rodando
+- [ ] Políticas internas lidas e assinadas no SharePoint
+- [ ] 1:1 com gestor realizado
+- [ ] Buddy designado e primeiro contato feito
+- [ ] Treinamento específico da função concluído
+
+<Callout type="info">
+  Dúvidas? Contate `rh@neotel.internal` ou o canal `#onboarding` no Slack.
+</Callout>

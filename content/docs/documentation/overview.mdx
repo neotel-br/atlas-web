@@ -1,6 +1,96 @@
 ---
-title: Visão geral
-description: Visão geral da documentação
+title: Visão Geral
+description: Guia completo de funcionalidades do sistema NeoDocs
 ---
 
-Esta seção reúne guias técnicos e referências de produto.
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Steps, Step } from 'fumadocs-ui/components/steps';
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { Card, Cards } from 'fumadocs-ui/components/card';
+
+## Introdução
+
+O **NeoDocs** é a plataforma central de documentação e gestão de conhecimento da Neotel. Esta visão geral cobre as principais funcionalidades do sistema.
+
+<Callout type="info">
+  Esta documentação é atualizada semanalmente. Última atualização: **maio 2026**.
+</Callout>
+
+## Funcionalidades Principais
+
+<Cards>
+  <Card title="Autenticação" description="Login seguro com SSO e controle de sessão por perfil de usuário." />
+  <Card title="Documentação" description="Base de conhecimento estruturada com busca full-text integrada." />
+  <Card title="Relatórios" description="Modelos padronizados de relatórios mensais e de incidentes." />
+  <Card title="Processos" description="Fluxos operacionais, onboarding e procedimentos internos." />
+</Cards>
+
+## Primeiros Passos
+
+<Steps>
+  <Step>
+    **Acesse o sistema** em `https://docs.neotel.internal` com suas credenciais corporativas.
+  </Step>
+  <Step>
+    **Escolha o idioma** no rodapé da barra lateral (Português ou English).
+  </Step>
+  <Step>
+    **Navegue pelas seções** usando a barra lateral esquerda ou a busca no topo.
+  </Step>
+  <Step>
+    **Contribua** abrindo um Pull Request no repositório `neodocs-web`.
+  </Step>
+</Steps>
+
+## Instalação Local
+
+<Tabs items={['npm', 'pnpm', 'yarn']}>
+  <Tab value="npm">
+    ```bash
+    git clone https://github.com/neotel/neodocs-web
+    cd neodocs-web
+    npm install
+    npm run dev
+    ```
+  </Tab>
+  <Tab value="pnpm">
+    ```bash
+    git clone https://github.com/neotel/neodocs-web
+    cd neodocs-web
+    pnpm install
+    pnpm dev
+    ```
+  </Tab>
+  <Tab value="yarn">
+    ```bash
+    git clone https://github.com/neotel/neodocs-web
+    cd neodocs-web
+    yarn install
+    yarn dev
+    ```
+  </Tab>
+</Tabs>
+
+## Variáveis de Ambiente
+
+```env
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=seu-secret-aqui
+DATABASE_URL=postgresql://user:pass@localhost:5432/neodocs
+```
+
+<Callout type="warn">
+  Nunca commite o arquivo `.env` no repositório. Use `.env.example` como referência.
+</Callout>
+
+## Perfis de Acesso
+
+| Perfil | Permissões |
+|--------|-----------|
+| `viewer` | Leitura de toda a documentação |
+| `editor` | Leitura + criação/edição de páginas |
+| `admin` | Acesso total + gestão de usuários |
+
+<Callout type="error">
+  Contas `admin` devem usar autenticação de dois fatores obrigatoriamente.
+</Callout>

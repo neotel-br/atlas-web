@@ -1,6 +1,97 @@
 ---
-title: Relatório mensal
-description: Modelo de relatório mensal
+title: Relatório Mensal
+description: Modelo padronizado de relatório mensal de operações
 ---
 
-Modelo padrão de relatório mensal.
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Steps, Step } from 'fumadocs-ui/components/steps';
+
+## Modelo de Relatório Mensal
+
+Este documento descreve o modelo padrão para relatórios mensais de operações da Neotel.
+
+<Callout type="info">
+  Preencha este modelo até o **5º dia útil** de cada mês e envie para `ops@neotel.internal`.
+</Callout>
+
+---
+
+## 1. Resumo Executivo
+
+Descreva em 2-3 parágrafos os principais acontecimentos do mês:
+
+- Volume de chamados atendidos
+- Incidentes críticos registrados
+- Indicadores de SLA (cumprido / não cumprido)
+
+**Exemplo:**
+
+> Em maio de 2026, foram atendidos **342 chamados**, com taxa de resolução no prazo de **94,7%**. Dois incidentes P1 foram registrados, ambos resolvidos dentro da janela de SLA. O índice de satisfação (CSAT) ficou em **4,6/5,0**.
+
+---
+
+## 2. Métricas Operacionais
+
+| Indicador | Meta | Realizado | Status |
+|-----------|------|-----------|--------|
+| SLA de Atendimento | ≥ 95% | 94,7% | ⚠️ |
+| Tempo Médio de Resolução | ≤ 4h | 3h22min | ✅ |
+| Chamados Abertos | — | 342 | — |
+| Chamados Fechados | — | 331 | — |
+| CSAT | ≥ 4,5 | 4,6 | ✅ |
+| Incidentes P1 | 0 | 2 | ❌ |
+
+---
+
+## 3. Incidentes do Período
+
+### Incidente #001 — Falha de Autenticação SSO
+
+| Campo | Valor |
+|-------|-------|
+| Data | 2026-05-08 14:32 |
+| Duração | 47 minutos |
+| Impacto | 28 usuários afetados |
+| Causa Raiz | Expiração de certificado SSL do IdP |
+| Resolução | Renovação emergencial do certificado |
+| Responsável | João Silva |
+
+<Callout type="warn">
+  Ação corretiva: implementar alerta automático 30 dias antes do vencimento de certificados.
+</Callout>
+
+### Incidente #002 — Lentidão no Banco de Dados
+
+| Campo | Valor |
+|-------|-------|
+| Data | 2026-05-19 09:15 |
+| Duração | 2h10min |
+| Impacto | Degradação de performance para todos os usuários |
+| Causa Raiz | Query sem índice executando full table scan |
+| Resolução | Criação de índice composto na tabela `events` |
+| Responsável | Maria Souza |
+
+---
+
+## 4. Ações para o Próximo Mês
+
+<Steps>
+  <Step>
+    Implementar alerta automático de vencimento de certificados SSL (prazo: 15/06).
+  </Step>
+  <Step>
+    Revisar todas as queries críticas sem índice no banco de produção (prazo: 20/06).
+  </Step>
+  <Step>
+    Treinamento da equipe em resposta a incidentes P1 (prazo: 30/06).
+  </Step>
+</Steps>
+
+---
+
+## 5. Aprovação
+
+| Papel | Nome | Assinatura | Data |
+|-------|------|-----------|------|
+| Gestor de Operações | Carlos Mendes | | |
+| Diretor de TI | Ana Ferreira | | |
