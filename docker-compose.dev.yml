@@ -1,34 +1,19 @@
 services:
-  db:
-    image: pgvector/pgvector:pg16
-    environment:
-      POSTGRES_USER: neodocs
-      POSTGRES_PASSWORD: dev
-      POSTGRES_DB: neodocs
-    ports:
-      - "5432:5432"
-    volumes:
-      - neodocs_dev_db:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U neodocs"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
   app:
     build:
       context: .
-      dockerfile: Dockerfile.dev
-    env_file: .env.dev
+      target: dev
     ports:
-      - "3000:3000"
+      - "${DEV_PORT:-3000}:3000"
+    environment:
+      NEXT_TELEMETRY_DISABLED: "1"
+    stdin_open: true
+    tty: true
     volumes:
       - .:/app
-      - /app/node_modules
-      - /app/.next
-    depends_on:
-      db:
-        condition: service_healthy
+      - neodocs_node_modules:/app/node_modules
+      - neodocs_next_cache:/app/.next
 
 volumes:
-  neodocs_dev_db:
+  neodocs_node_modules:
+  neodocs_next_cache:
