@@ -1,8 +1,62 @@
 services:
-  nginx:
+  web:
+    image: "${PROD_IMAGE_NAME:-neocontratos-docs}:${PROD_IMAGE_TAG:-local}"
     build:
       context: .
       target: prod
-    ports:
-      - "${PROD_PORT:-8080}:80"
+      args:
+        VCS_REF: "${VCS_REF:-local}"
+        BUILD_DATE: "${BUILD_DATE:-unknown}"
+    expose:
+      - "80"
+    environment:
+      SERVER_NAME: "${SERVER_NAME:-_}"
+      NGINX_CLIENT_MAX_BODY_SIZE: "${NGINX_CLIENT_MAX_BODY_SIZE:-2m}"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1/healthz || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     restart: unless-stopped
+    stop_grace_period: 10s
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx
+      - /var/run
+      - /tmp
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.neodocs.rule=Host(`${SERVER_NAME}`)"
+      - "traefik.http.routers.neodocs.entrypoints=websecure"
+      - "traefik.http.routers.neodocs.tls=true"
+      - "traefik.http.services.neodocs.loadbalancer.server.port=80"
+
+  traefik:
+    image: traefik:v3.1
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.file.directory=/etc/traefik/dynamic"
+      - "--providers.file.watch=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.websecure.address=:443"
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/dynamic:/etc/traefik/dynamic:ro
+      - "${TRAEFIK_CERT_PATH}:/etc/traefik/certs/cert.pem:ro"
+      - "${TRAEFIK_KEY_PATH}:/etc/traefik/certs/key.pem:ro"
+    restart: unless-stopped
+    networks:
+      - web
+
+networks:
+  web:
+    driver: bridge

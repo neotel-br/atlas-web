@@ -28,6 +28,7 @@ make dev
 Production build served by `nginx`:
 
 ```bash
+cp .env.prod.example .env.prod
 make prod
 ```
 
@@ -38,19 +39,46 @@ make down
 make logs-dev
 make logs-prod
 make clean
+make prod-validate
+make prod-build
+make prod-deploy
 ```
 
 Default ports:
 
 - dev: `http://localhost:3000`
-- prod: `http://localhost:8080`
+- prod: `https://atlas.neotel.com.br` (via traefik, port `443`)
 
 Optional overrides:
 
 ```bash
 DEV_PORT=3001 make dev
-PROD_PORT=80 make prod
 ```
+
+## Production deploy
+
+Production runs behind a `traefik` reverse proxy (TLS termination on `443`) in front of a dedicated `nginx` runtime image with:
+
+- config generated from env vars at container startup;
+- cache headers for static assets;
+- security headers;
+- `healthz` endpoint for post-deploy checks.
+
+Recommended flow:
+
+```bash
+cp .env.prod.example .env.prod
+make prod-validate
+make prod-deploy
+```
+
+Main production vars:
+
+- `SERVER_NAME`: domain routed by `traefik` (e.g. `atlas.neotel.com.br`)
+- `PROD_IMAGE_NAME`: image repository/name
+- `PROD_IMAGE_TAG`: release tag
+- `NGINX_CLIENT_MAX_BODY_SIZE`: request size limit
+- `TRAEFIK_CERT_PATH` / `TRAEFIK_KEY_PATH`: host paths to TLS cert/key
 
 ## Explore
 
