@@ -25,7 +25,7 @@ FROM nginx:1.29-alpine AS prod
 ARG VCS_REF=local
 ARG BUILD_DATE=unknown
 
-LABEL org.opencontainers.image.title="neocontratos-docs" \
+LABEL org.opencontainers.image.title="atlas" \
       org.opencontainers.image.revision="${VCS_REF}" \
       org.opencontainers.image.created="${BUILD_DATE}"
 
