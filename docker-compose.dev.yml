@@ -11,9 +11,9 @@ services:
     tty: true
     volumes:
       - .:/app
-      - neodocs_node_modules:/app/node_modules
-      - neodocs_next_cache:/app/.next
+      - atlas_node_modules:/app/node_modules
+      - atlas_next_cache:/app/.next
 
 volumes:
-  neodocs_node_modules:
-  neodocs_next_cache:
+  atlas_node_modules:
+  atlas_next_cache:

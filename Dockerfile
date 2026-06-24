@@ -29,7 +29,7 @@ LABEL org.opencontainers.image.title="neocontratos-docs" \
       org.opencontainers.image.revision="${VCS_REF}" \
       org.opencontainers.image.created="${BUILD_DATE}"
 
-COPY nginx/neodocs.conf.template /etc/nginx/templates/default.conf.template
+COPY nginx/atlas.conf.template /etc/nginx/templates/default.conf.template
 COPY --from=build /app/out /usr/share/nginx/html
 
 EXPOSE 80
