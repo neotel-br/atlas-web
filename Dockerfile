@@ -1,4 +1,4 @@
-FROM node:22-alpine AS base
+FROM node:22-alpine3.23.5 AS base
 
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -20,7 +20,7 @@ FROM deps AS build
 COPY . .
 RUN npm run build
 
-FROM nginx:1.29-alpine AS prod
+FROM nginx:stable-trixie-perl AS prod
 
 ARG VCS_REF=local
 ARG BUILD_DATE=unknown
