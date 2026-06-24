@@ -43,10 +43,10 @@ services:
     build:
       context: .
       target: build
-    command: ["sh", "-c", "npm run build && npm run watch:docs"]
+    command: ["sh", "-c", "npm run build && rsync -a --delete out/ /shared/ && npm run watch:docs"]
     volumes:
       - ./content/docs:/app/content/docs
-      - docs_build:/app/out
+      - docs_build:/shared
     restart: unless-stopped
     networks:
       - web

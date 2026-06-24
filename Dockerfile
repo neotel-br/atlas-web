@@ -1,5 +1,7 @@
 FROM node:22-alpine3.23 AS base
 
+RUN apk add --no-cache rsync
+
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
 
