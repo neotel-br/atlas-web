@@ -4,7 +4,7 @@ export const docsImageRoute = '/og/documentacao';
 export const docsContentRoute = '/llms.mdx/documentacao';
 
 export const gitConfig = {
-  user: 'mpereira',
-  repo: 'neocontratos',
+  user: 'neotel-br',
+  repo: 'atlas-web',
   branch: 'main',
 };
